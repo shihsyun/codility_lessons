@@ -31,7 +31,7 @@ each element of array A is an integer within the range [1..1,000,000,000];
 all but one of the values in A occur an even number of times.
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at https://app.codility.com/demo/results/trainingWGY49S-XH9/ .
+You can check it out the result at https://app.codility.com/demo/results/trainingKRJENH-ZH7/ .
 """
 
 # you can write to stdout for debugging purposes, e.g.
@@ -39,15 +39,15 @@ You can check it out the result at https://app.codility.com/demo/results/trainin
 
 def solution(A):
     # write your code in Python 3.6
-    # 依序scan array存入set，若set中無匹對值則存值，若有匹對值則移除set中存值，最後留下來的就是無匹對值。
-    tmp = set()
-    for index in A:
-        try:
-            tmp.remove(index)
-        except KeyError:
-            tmp.add(index)
-    
-    return tmp.pop()
+    # 使用XOR運算找出無匹對值。
+    # X ^ (Y ^ Z) = (X ^ Y) ^ Z
+    # X ^ X = 0 ,  0 ^ X = X
+    # more detail please check it out at https://codesays.com/2014/solution-to-perm-missing-elem-by-codility/#comment-144 .
+    x = 0
+    for number in A:
+        x ^= number
+
+    return x
 
 A = [9 ,3 ,9 ,3 ,9 ,7, 9]
 print(solution(A))
