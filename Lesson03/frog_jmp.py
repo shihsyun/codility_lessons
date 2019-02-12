@@ -28,7 +28,7 @@ X, Y and D are integers within the range [1..1,000,000,000];
 X ≤ Y.
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at .
+You can check it out the result at https://app.codility.com/demo/results/trainingDMDHPA-VZG/ .
 """
 
 # you can write to stdout for debugging purposes, e.g.
@@ -36,7 +36,19 @@ You can check it out the result at .
 
 def solution(X, Y, D):
     # write your code in Python 3.6
-    pass
+    # 須注意非整除時，須再增加一步
+
+    tail = 0
+    if (Y - X) % D != 0:
+        tail = 1
+    
+    return (Y - X) // D + tail
+
+X = 10
+Y = 85
+D = 30
+
+print(solution(X, Y, D))
 
 
 
