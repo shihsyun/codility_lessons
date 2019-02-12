@@ -26,6 +26,7 @@ You can check it out the result at https://app.codility.com/demo/results/trainin
 
 def solution(N):
     # write your code in Python 3.6
+    # 使用format將int轉成binary string，接著過濾0與使用1切割轉成list，再利用len與max求出該list最大長度。
     return len(max(format(N,'b').strip('0').split('1')))
 
 N = 1041
