@@ -44,7 +44,7 @@ N is an integer within the range [2..100,000];
 each element of array A is an integer within the range [−1,000..1,000].
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at https://app.codility.com/demo/results/trainingZ6XE3Z-Q43/ .
+You can check it out the result at https://app.codility.com/demo/results/training42E9AP-P25/ .
 """
 
 # you can write to stdout for debugging purposes, e.g.
@@ -52,13 +52,13 @@ You can check it out the result at https://app.codility.com/demo/results/trainin
 
 def solution(A):
     # write your code in Python 3.6
-    # 先計算第一次分割後的差距值，接著使用迴圈做A的元素值頭加尾減的計算，過程中紀錄最小值並回傳。
+    # 先計算第一次分割後的差距值，接著使用迴圈取A的元素值並做頭加尾減的計算，過程中紀錄最小值後回傳。
     head = A[0]
     tail = sum(A[1:])
     diff = abs(head - tail)
-    for index in range(1,len(A)-1):
-        head += A[index]
-        tail -= A[index]
+    for number in A[1:-1]:
+        head += number
+        tail -= number
         diff = min(diff , abs(head -tail))
 
     return diff
