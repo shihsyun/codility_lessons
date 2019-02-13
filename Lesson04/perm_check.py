@@ -48,7 +48,7 @@ N is an integer within the range [1..100,000];
 each element of array A is an integer within the range [1..1,000,000,000].
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at .
+You can check it out the result at https://app.codility.com/demo/results/trainingF8TRG7-CSW/ .
 """
 
 # you can write to stdout for debugging purposes, e.g.
@@ -57,7 +57,11 @@ You can check it out the result at .
 def solution(A):
     # write your code in Python 3.6
     # 對A做排序，依序判斷是否為有序排列
+    # 若X[0]的值不為1，則回傳0
     X = sorted(A)
+
+    if X[0] != 1:
+        return 0
 
     for index in range(0, len(X)-1):
         if X[index]+1 != X[index+1]:
@@ -71,4 +75,8 @@ print(solution(A))
 
 # testcase 2
 A = [4 ,1 ,3]
+print(solution(A))
+
+# testcase 3
+A = [2]
 print(solution(A))
