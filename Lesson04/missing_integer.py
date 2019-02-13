@@ -22,7 +22,7 @@ N is an integer within the range [1..100,000];
 each element of array A is an integer within the range [−1,000,000..1,000,000].
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at https://app.codility.com/demo/results/trainingQ5SAJ6-ECG/ .
+You can check it out the result at https://app.codility.com/demo/results/trainingAH3KT6-AYB/ .
 """
 
 # you can write to stdout for debugging purposes, e.g.
@@ -31,12 +31,23 @@ You can check it out the result at https://app.codility.com/demo/results/trainin
 def solution(A):
 
     # write your code in Python 3.6
-    # 使用in語法做判斷，花費時間為O(N**2)
-    for idx in range(1 ,len(A)+2):
-        if idx not in A:
-            return idx
+    # 使用set做判斷，得到分數55%
+
+    if len(A) == 1 and A[0] > 1:
+        return 1
+
+    N = set(range(1 ,len(A)))
+    X = set(A)
     
-    return idx
+    R1 = X - N
+    if R1.pop() <= 0:
+        return 1
+
+    R2 = N - X
+    if len(R2) == 0:
+        return len(A)+1
+
+    return R2.pop()
 
 
 # testcase 1
@@ -50,4 +61,9 @@ print (solution(A))
 # testcase 3
 A = [-1, -3]
 print (solution(A))
+
+# testcase 4
+A = [2]
+print (solution(A))
+
 
