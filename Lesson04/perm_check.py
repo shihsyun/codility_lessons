@@ -48,7 +48,7 @@ N is an integer within the range [1..100,000];
 each element of array A is an integer within the range [1..1,000,000,000].
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at https://app.codility.com/demo/results/trainingF8TRG7-CSW/ .
+You can check it out the result at https://app.codility.com/demo/results/training9TTH5Z-HXV/ .
 """
 
 # you can write to stdout for debugging purposes, e.g.
@@ -56,18 +56,13 @@ You can check it out the result at https://app.codility.com/demo/results/trainin
 
 def solution(A):
     # write your code in Python 3.6
-    # 對A做排序，依序判斷是否為有序排列
-    # 若X[0]的值不為1，則回傳0
-    X = sorted(A)
+    # 製造一有序集合並與A做比對做判斷是否為排列
+    # more detail please check it out at https://codesays.com/2014/solution-to-perm-check-by-codility/#comment-310 .
 
-    if X[0] != 1:
+    if set(A) == set(range(1 , 1 + len(A))):
+        return 1
+    else:
         return 0
-
-    for index in range(0, len(X)-1):
-        if X[index]+1 != X[index+1]:
-            return 0
-
-    return 1
 
 # testcase 1
 A = [4 ,1 ,3, 2]
