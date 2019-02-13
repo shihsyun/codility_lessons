@@ -56,17 +56,14 @@ You can check it out the result at .
 
 def solution(A):
     # write your code in Python 3.6
-    # 計算總合後依序減去各元素值，若總和相同即可判定為排列
-    N = len(A)
-    total = (1 + N) * N / 2
+    # 對A做排序，依序判斷是否為有序排列
+    X = sorted(A)
 
-    for number in A:
-        total -= number
+    for index in range(0, len(X)-1):
+        if X[index]+1 != X[index+1]:
+            return 0
 
-    if total < 0:
-        return 0
-    else:
-        return 1
+    return 1
 
 # testcase 1
 A = [4 ,1 ,3, 2]
