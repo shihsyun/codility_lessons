@@ -56,5 +56,22 @@ You can check it out the result at .
 
 def solution(A):
     # write your code in Python 3.6
-    pass
+    # 計算總合後依序減去各元素值，若總和相同即可判定為排列
+    N = len(A)
+    total = (1 + N) * N / 2
 
+    for number in A:
+        total -= number
+
+    if total < 0:
+        return 0
+    else:
+        return 1
+
+# testcase 1
+A = [4 ,1 ,3, 2]
+print(solution(A))
+
+# testcase 2
+A = [4 ,1 ,3]
+print(solution(A))
