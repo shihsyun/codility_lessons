@@ -22,7 +22,7 @@ N is an integer within the range [1..100,000];
 each element of array A is an integer within the range [−1,000,000..1,000,000].
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at https://app.codility.com/demo/results/trainingAH3KT6-AYB/ .
+You can check it out the result at https://app.codility.com/demo/results/trainingDUCFG7-2SE/ .
 """
 
 # you can write to stdout for debugging purposes, e.g.
@@ -31,23 +31,9 @@ You can check it out the result at https://app.codility.com/demo/results/trainin
 def solution(A):
 
     # write your code in Python 3.6
-    # 使用set做判斷，得到分數55%
-
-    if len(A) == 1 and A[0] > 1:
-        return 1
-
-    N = set(range(1 ,len(A)))
-    X = set(A)
-    
-    R1 = X - N
-    if R1.pop() <= 0:
-        return 1
-
-    R2 = N - X
-    if len(R2) == 0:
-        return len(A)+1
-
-    return R2.pop()
+    # 創建一完整set，長度須為len(A)+2，否則與原集合做完差集後會產生空集合。
+    # https://codesays.com/2014/solution-to-missing-integer-by-codility/#comment-1536
+    return min(set(range(1 ,len(A) + 2)) - set(A))
 
 
 # testcase 1
