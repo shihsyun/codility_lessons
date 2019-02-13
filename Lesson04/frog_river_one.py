@@ -46,7 +46,7 @@ N and X are integers within the range [1..100,000];
 each element of array A is an integer within the range [1..X].
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at https://app.codility.com/demo/results/trainingCW2G6E-VQP/ .
+You can check it out the result at https://app.codility.com/demo/results/trainingYWVPQ9-8JJ/ .
 """
 
 # you can write to stdout for debugging purposes, e.g.
@@ -54,18 +54,22 @@ You can check it out the result at https://app.codility.com/demo/results/trainin
 
 def solution(X, A):
     # write your code in Python 3.6
-    # 利用Dict紀錄每一步的最近時間，須注意若已出現過須排除，再回傳該Dict最大值。
-    pos = {}
+    # 建立一個陣列n紀錄A各元素值出現的最早時間，當n除[0]皆有值>0時，回傳該陣列最大值，否則回傳-1。
+    # 因為testcase 4 需要將陣列初始值設為-1
 
-    for i in range(0, len(A)):
-        if A[i] not in pos:
-            pos.update({A[i] : i})
+    n = [-1] * (X + 1)
 
-    if len(pos) == X:
-        return max(pos.values())
-    
+    for idx ,i in enumerate(A):
+        if n[i] == -1:
+            n[i] = idx
+        else:
+            continue
+
+    if -1 not in n[1:]:
+        return max(set(n))
+
     return -1
-
+   
 # testcase 1
 X = 5
 A = [1 ,3 ,1 ,4 ,2 ,3, 5, 4]
@@ -79,4 +83,9 @@ print(solution(X , A))
 # testcase 3
 X = 3
 A = [1, 3, 1, 3, 2, 1, 3]
+print(solution(X , A))
+
+# testcase 4
+X = 1
+A = [1]
 print(solution(X , A))
