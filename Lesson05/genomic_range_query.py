@@ -40,7 +40,7 @@ P[K] ≤ Q[K], where 0 ≤ K < M;
 string S consists only of upper-case English letters A, C, G, T.
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at https://app.codility.com/demo/results/trainingNGD44Q-BRG/ .
+You can check it out the result at https://app.codility.com/demo/results/trainingENM7YS-M9R/ .
 """
 
 # you can write to stdout for debugging purposes, e.g.
@@ -49,33 +49,21 @@ You can check it out the result at https://app.codility.com/demo/results/trainin
 def solution(S ,P ,Q):
     
     # write your code in Python 3.6
-    # 依照規則進行字串拆解，遇到Performance issue，複雜度為O(N*M)，拿到62%。
+    # 反向思考，如果改由四個固定的基因種類來做in判斷之後，複雜度降為O(N+M)，分數達到100%。
+    # more detail please check it out at https://codesays.com/2014/solution-to-genomic-range-query-by-codility/#comment-1727 .
 
-    N = [0]*len(P)
+    impact = { 'A' : 1,
+               'C' : 2,               
+               'G' : 3,               
+               'T' : 4  }
+
+    N = []
     for idx in range (0 , len(P)):
-        elem = S[P[idx]:Q[idx]+1]
-        f = 5
-        for s in elem:
-            
-            if s == "A":
-                if f >= 1:
-                    f = 1
+        for f in impact:
+            if f in S[P[idx]:Q[idx]+1]:
+                N.append(impact[f])
+                break
 
-            if s == "C":
-                if f >= 2:
-                    f = 2
-
-            if s == "G":
-                if f >= 3:
-                    f = 3
-
-            if s == "T":
-                if f >= 4:
-                    f = 4
-
-
-            N[idx] = f
-    
     return N
 
 
