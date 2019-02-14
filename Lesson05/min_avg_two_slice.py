@@ -43,7 +43,7 @@ N is an integer within the range [2..100,000];
 each element of array A is an integer within the range [−10,000..10,000].
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at  .
+You can check it out the result at https://app.codility.com/demo/results/trainingK5MGHJ-CAT/ .
 """
 
 # you can write to stdout for debugging purposes, e.g.
