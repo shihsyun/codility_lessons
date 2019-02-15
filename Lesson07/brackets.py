@@ -24,7 +24,7 @@ string S consists only of the following characters: "(", "{", "[", "]", "}" and/
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
 
-You can check it out the result at https://app.codility.com/demo/results/trainingVYSU6A-AKU/ .
+You can check it out the result at https://app.codility.com/demo/results/trainingZYAYVT-UAB/ .
 
 # you can write to stdout for debugging purposes, e.g.
 # print("this is a debug message")
@@ -37,38 +37,28 @@ def solution(S):
     # 建立一個新List，遇到"(", "{", "["就append，反之就pop，若非成對即回傳0
     # 注意testcase要考慮先出現"]", "}", ")"
     # 最後檢查List長度，若等於0則回傳1
+    # 改寫成Pythonic style
 
+    if len(S) % 2 == 1: return 0
+
+    matched = {')':'(',
+               '}':'{',
+               ']':'['  }
+
+    need_push = ['(', '{', '[']
     check = []
 
     for elem in S:
 
-        if len(check) == 0:
+        if elem in need_push:
             check.append(elem)
             continue
 
-        if elem == '(':
-            check.append(elem)
-        
-        if elem == '{':
-            check.append(elem)
+        if len(check) == 0:
+            return 0
 
-        if elem == '[':
-            check.append(elem)
-        
-        if elem == ')':
-            pair = check.pop()
-            if not pair == '(':
-                return 0
-
-        if elem == '}':
-            pair = check.pop()
-            if not pair == '{':
-                return 0
-
-        if elem == ']':
-            pair = check.pop()
-            if not pair == '[':
-                return 0
+        if matched[elem] != check.pop():
+            return 0
 
     if len(check) == 0:
         return 1
