@@ -41,7 +41,7 @@ each element of array B is an integer that can have one of the following values:
 the elements of A are all distinct.
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at https://app.codility.com/demo/results/training8S4VV5-9EB/ .
+You can check it out the result at https://app.codility.com/demo/results/trainingPQVABE-XM3/ .
 
 # you can write to stdout for debugging purposes, e.g.
 # print("this is a debug message")
@@ -51,34 +51,23 @@ You can check it out the result at https://app.codility.com/demo/results/trainin
 def solution(A ,B):
 
     # write your code in Python 3.6
-    # 存A[0]進入List，接著依序掃描陣列並判斷與List[-1]方向，若方向相同或前0後1則無條件存入元素
-    # 若方向相反則判斷大小後若若List[-1]小，則取出List[-1]後存入元素
-    # 要考慮邊界值與List為0情況
-
-    if len(A) == 1: return 1
+    # 每放進一支downstream的魚(challenger)，就必須比對所有rivers一次，贏到最後的人就是倖存者(surviver)
+    # more detail please check it out at https://www.martinkysel.com/codility-fish-solution/ .
 
     rivers = []
 
     for idx in range(len(A)):
+        challenger = idx
 
-        if len(rivers) == 0:
-            rivers.append([A[idx], B[idx]])
-            continue
-        
-        if rivers[-1][1] == 0 and B[idx] == 1:
-            rivers.append([A[idx], B[idx]])
-            continue
-
-        if rivers[-1][1] ==  B[idx]:
-            rivers.append([A[idx], B[idx]])
-            continue
-
-        if A[idx] > rivers[-1][0]:
-            rivers.pop()
-            rivers.append([A[idx], B[idx]])
-            continue
+        while rivers and B[rivers[-1]] == 1 and B[challenger] == 0:
+            surviver = rivers.pop()
+            if A[surviver] > A[challenger]:
+                challenger = surviver
+                
+        rivers.append(challenger)
 
     return len(rivers)
+
 
 # testcase 1
 A = [4 ,3 ,2 ,1 ,5]
