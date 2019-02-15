@@ -34,48 +34,51 @@ N is an integer within the range [0..100,000];
 each element of array A is an integer within the range [0..2,147,483,647].
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at https://app.codility.com/demo/results/training67FWFR-6JZ/ .
-"""
+You can check it out the result at https://app.codility.com/demo/results/trainingCWKFUT-44R/ .
 
 # you can write to stdout for debugging purposes, e.g.
 # print("this is a debug message")
 
+"""
+
 def solution(A):
 
     # write your code in Python 3.6
-    # 依序掃描A陣列，計算每個圓圈在X軸上的左右兩端點，若左右兩端點皆沒有落在下一個圓的範圍內，則代表沒有相交。
-    # 要特別注意兩圓包含的情形，分別有比下一個圓更小或更大兩種情形。
-    
-    intersect = 0
+    # 先建立圓盤陣列，接著循序計算左右各端點的X軸座標，接著依照(1)座標(2)L/R的參數做正向排序
+    # 此時圓盤陣列會如下圖所示
+    # http://www.lucainvernizzi.net/img/blog/disk-intersections-thick-642f9e5c.png
+    # 依序讀取圓盤陣列，若遇左端點就遞增盤子數量並加入intersections變數中
+    # 反之就遞減盤子數量，最後即可求出各圓交集數量
+    # more detail please check it out at https://www.martinkysel.com/codility-number-of-disc-intersections-2010-beta-solution/ .    
 
-    for i in range(len(A)):
-        for j in range(i + 1 , len(A)):
-            cil = i - A[i]
-            cir = i + A[i]
-            cjl = j - A[j]
-            cjr = j + A[j]
+    circles = []
+    for idx , radius in enumerate(A):
+        circles.append([idx - radius , 'L'])
+        circles.append([idx + radius , 'R'])
 
-            if (cjl <= cil) and (cil <= cjr):
-                intersect += 1
-                continue
+    circles.sort(key = lambda x :(x[0],x[1]))
 
-            if (cjl <= cir) and (cir <= cjr):
-                intersect += 1
-                continue
+    intersections = 0
+    actives = 0
 
-            if (cjl <= cil) and (cir <= cjr):
-                intersect += 1
-                continue
+    for _, flag in circles:
+        if flag == 'L':
+            intersections += actives
+            actives += 1
+        else:
+            actives -= 1
+        
+        if intersections > 10e6:
+            return -1
 
-            if (cjl >= cil) and (cir >= cjr):
-                intersect += 1
-                continue
+    return intersections
 
-    if intersect >= 1e7:
-        return -1
-
-    return intersect
-
+# testcase 1
 A = [1 ,5 ,2 ,1 ,4 ,0]
 print(solution(A))
+
+# testcase 2
+A = [1 ,1 ,1]
+print(solution(A))
+
 
