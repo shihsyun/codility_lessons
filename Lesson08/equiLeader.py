@@ -44,7 +44,7 @@ N is an integer within the range [1..100,000];
 each element of array A is an integer within the range [−1,000,000,000..1,000,000,000].
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at https://app.codility.com/demo/results/trainingNPB9KB-T9H/ .
+You can check it out the result at https://app.codility.com/demo/results/trainingGMF44G-SJX/ .
 
 # you can write to stdout for debugging purposes, e.g.
 # print("this is a debug message")
@@ -54,37 +54,36 @@ You can check it out the result at https://app.codility.com/demo/results/trainin
 def solution(A):
 
     # write your code in Python 3.6
-    # 依照題目定義，進行迴圈比對。
-    # 解法的複雜度為O(N**2)，拿到55%。
+    # 先搜尋最常出現的數字為candidate
+    # 之後利用A.count求出總出現數字，在確認總出現數字大於等於陣列長度一半情形下
+    # 再跑一次for迴圈，計算candidate在左邊與右邊皆為leader的出現次數
+    # more detail please check it out at https://www.martinkysel.com/codility-equileader-solution/ .
 
+    size = len(A)
     count = 0
+    candidate, candidate_count = 0, 0
 
-    for idx in range(len(A)):
+    for elem in A:
+        if candidate_count == 0:
+            candidate = elem
+            candidate_count += 1
+        else:
+            if candidate == elem:
+                candidate_count += 1
+            else:
+                candidate_count -= 1
 
-        A1 = A[:idx+1]
-        A2 = A[idx+1:]
-        repeat = []
+    candidate_count = A.count(candidate)
 
-        for i in range(len(A1)):
-            for j in range(len(A2)):
-                if A1[i] == A2[j] and A1[i] not in repeat:
-                    repeat.append(A1[i])
-
-        
-        for i in range(len(repeat)):
-            A1times, A2times = 0, 0
-
-            for j in range(len(A1)):
-                if repeat[i] == A1[j]:
-                    A1times += 1
-
-            for j in range(len(A2)):
-                if repeat[i] == A2[j]:
-                    A2times += 1
-
-            if A1times * 2 > len(A1)  and A2times * 2 > len(A2):
-                count += 1
+    if candidate_count > size // 2:
+        left = 0
+        for idx, value in enumerate(A):
+            if value == candidate:
+                left += 1
             
+            if left > (idx + 1) // 2  and (candidate_count - left) > (size - (idx + 1)) // 2:
+                count += 1
+                
     return count
 
 
