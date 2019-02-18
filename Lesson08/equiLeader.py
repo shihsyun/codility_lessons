@@ -44,47 +44,36 @@ N is an integer within the range [1..100,000];
 each element of array A is an integer within the range [−1,000,000,000..1,000,000,000].
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at https://app.codility.com/demo/results/trainingGMF44G-SJX/ .
+You can check it out the result at https://app.codility.com/demo/results/training4PGZ75-8WB/ .
 
 # you can write to stdout for debugging purposes, e.g.
 # print("this is a debug message")
 
 """
 
+from collections import Counter
+
 def solution(A):
 
     # write your code in Python 3.6
-    # 先搜尋最常出現的數字為candidate
-    # 之後利用A.count求出總出現數字，在確認總出現數字大於等於陣列長度一半情形下
+    # 利用Counter物件計算Candidate與Candidate_count
     # 再跑一次for迴圈，計算candidate在左邊與右邊皆為leader的出現次數
-    # more detail please check it out at https://www.martinkysel.com/codility-equileader-solution/ .
+    # more detail please check it out at https://codesays.com/2014/solution-to-equi-leader-by-codility/#comment-831 .
 
-    size = len(A)
-    count = 0
-    candidate, candidate_count = 0, 0
+    result = 0
+    candidate, candidate_count  = Counter(A).most_common()[0]
 
-    for elem in A:
-        if candidate_count == 0:
-            candidate = elem
-            candidate_count += 1
-        else:
-            if candidate == elem:
-                candidate_count += 1
-            else:
-                candidate_count -= 1
-
-    candidate_count = A.count(candidate)
-
-    if candidate_count > size // 2:
-        left = 0
-        for idx, value in enumerate(A):
-            if value == candidate:
-                left += 1
+    
+    left = 0
+    for idx, value in enumerate(A):
             
-            if left > (idx + 1) // 2  and (candidate_count - left) > (size - (idx + 1)) // 2:
-                count += 1
-                
-    return count
+        if value == candidate:
+            left += 1
+            
+        if left > (idx + 1) // 2 and (candidate_count - left) > (len(A) - (idx + 1)) // 2:
+            result +=1
+
+    return result
 
 
 # testcase 1
