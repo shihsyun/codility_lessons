@@ -36,7 +36,7 @@ N is an integer within the range [0..400,000];
 each element of array A is an integer within the range [0..200,000].
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at https://app.codility.com/demo/results/training78RXQA-PFA/ .
+You can check it out the result at https://app.codility.com/demo/results/trainingU9QYMU-NHB/ .
 
 # you can write to stdout for debugging purposes, e.g.
 # print("this is a debug message")
@@ -46,15 +46,17 @@ You can check it out the result at https://app.codility.com/demo/results/trainin
 def solution(A):
 
         # write your code in Python 3.6
-        # 使用兩個迴圈計算，複雜度為O(N**2)，拿到66%。
+        # 查詢網路作法後，降低複雜度為O(N)，拿到100%。
+        # more detail please check it out at https://www.martinkysel.com/codility-maxprofit-solution/ .
 
-    total = 0
+    once_price = 2*10E4
+    once_profit = 0
 
-    for idx in range(len(A)):
-        for i in range(idx + 1, len(A)):
-            total = max(total, A[i] - A[idx])
+    for X in A:
+        once_price = min(once_price, X)
+        once_profit = max(once_profit, X - once_price)
 
-    return total
+    return once_profit
 
 #testcase 1
 A = [23171, 21011, 21123, 21366, 21013, 21367]
