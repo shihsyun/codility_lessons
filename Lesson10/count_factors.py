@@ -19,7 +19,7 @@ Write an efficient algorithm for the following assumptions:
 N is an integer within the range [1..2,147,483,647].
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at  .
+You can check it out the result at https://app.codility.com/demo/results/trainingVBXTW3-35R/ .
 
 # you can write to stdout for debugging purposes, e.g.
 # print("this is a debug message")
@@ -32,10 +32,13 @@ def solution(N):
     # 參考codility附的教材，利用平方根方式求因數。
     # more detail please check it out at https://codility.com/media/train/8-PrimeNumbers.pdf .
 
+    if N == 1:
+        return 1
+
     count = 0
     i = 1
 
-    while i**2 <= N:
+    while i**2 < N:
         if N % i == 0:
             count += 2
         
@@ -61,4 +64,8 @@ print(solution(N))
 
 # testcase 4
 N = 100
+print(solution(N))
+
+# testcase 5
+N = 16
 print(solution(N))
