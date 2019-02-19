@@ -27,7 +27,7 @@ each element of array A is an integer within the range [−1,000,000..1,000,000]
 the result will be an integer within the range [−2,147,483,648..2,147,483,647].
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at https://app.codility.com/demo/results/training7W8KRZ-8AU/ .
+You can check it out the result at https://app.codility.com/demo/results/trainingFFB6YH-XKG/ .
 
 # you can write to stdout for debugging purposes, e.g.
 # print("this is a debug message")
@@ -37,15 +37,16 @@ You can check it out the result at https://app.codility.com/demo/results/trainin
 def solution(A):
         
     # write your code in Python 3.6
-    # 按照題目定義使用迴圈解，複雜度為O(N**3)，拿到69%。
-
-    total = float("-inf")
-
-    for i in range(len(A)):
-        for j in range(i, len(A)):
-            total = max (total , sum(A[i:j+1]))
+    # 查詢網路作法後，發現只需要分別使用兩個變數紀錄曾經擁有和到目前為止的總和，即可跑一次迴圈解決，複雜度降為O(N)。
+    # more detail please check it out at https://curt-park.github.io/2018-09-13/algorithm-max-slice-sum/ .
+ 
+    once_total = float("-inf")
+    until_now = 0
+    for X in A:
+            until_now = max(X, until_now + Ｘ)
+            once_total = max (once_total , until_now)
     
-    return total
+    return once_total
 
 #testcase 1
 A = [3, 2, -6, 4, 0]
