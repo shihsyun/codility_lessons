@@ -28,31 +28,23 @@ Write an efficient algorithm for the following assumptions:
 N is an integer within the range [1..1,000,000,000].
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at https://app.codility.com/demo/results/trainingRYX34M-ERP/ .
+You can check it out the result at https://app.codility.com/demo/results/trainingJ75WFC-ZUH/ .
 
 # you can write to stdout for debugging purposes, e.g.
 # print("this is a debug message")
 
 """
 
+from math import sqrt
+
 def solution(N):
-
     # write your code in Python 3.6
-    # 延續CounterFactor求出所有因數，並計算周長後取最小值回傳。
+    # 改使用sqrt，直接計算後回傳。
+    # more detail please check it out at https://codesays.com/2014/solution-to-min-perimeter-rectangle-by-codility/.
 
-    if N == 1:
-        return (1 + 1)*2
-
-    i = 1
-    area = (1 + N) * 2
-
-    while i ** 2 <= N:
+    for i in range(int(sqrt(N)), 0, -1):
         if N % i == 0:
-            area = min(area, ((N / i) + i) * 2)
-            
-        i += 1
-
-    return int(area)
+            return (int(N / i) + i) * 2
 
 # testcase 1
 N = 30
