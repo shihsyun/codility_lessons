@@ -49,7 +49,7 @@ N is an integer within the range [3..100,000];
 each element of array A is an integer within the range [−10,000..10,000].
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at https://app.codility.com/demo/results/training89782B-Y85/ .
+You can check it out the result at https://app.codility.com/demo/results/trainingYHF7BW-4BN/ .
 
 # you can write to stdout for debugging purposes, e.g.
 # print("this is a debug message")
@@ -59,26 +59,15 @@ You can check it out the result at https://app.codility.com/demo/results/trainin
 def solution(A):
 
     # write your code in Python 3.6
-    # 將原始陣列分成左右兩個陣列，左陣列為依序計算A[1]開始至最後的元素數值總和
-    # 右陣列為反向自A[-2]開始計算至最後，以上皆若遇負值需填0。
-    # 最後再將左右兩陣列數值加總取最大值後回傳
-    # https://en.wikipedia.org/wiki/Maximum_subarray_problem
-    # more detail please check it out at https://www.martinkysel.com/codility-maxdoubleslicesum-solution/ .
+    # 比MaxSlice多一個變數去紀錄左邊slice總和，使用A[Z-2]代表Ｘ、A[Z-1]代表Y，取最大值後回傳
+    # more detail please check it out at https://codesays.com/2014/solution-to-max-double-slice-sum-by-codility/#comment-870 .
 
-    size = len(A)
-    L_slice = [0]*size
-    R_slice = [0]*size
+    L_slice, until_now, once_total = 0, 0, 0
 
-    for idx in range(1, size):
-        L_slice[idx] = max(0, L_slice[idx-1] + A[idx])
-
-    for idx in reversed(range(size-1)):
-        R_slice[idx] = max(0, A[idx] + R_slice[idx+1])
-
-    once_total = L_slice[0] + R_slice[2]
-
-    for idx in range(1, size-1):
-        once_total = max(once_total, L_slice[idx-1] + R_slice[idx+1])
+    for Z in range(3, len(A)):
+        L_slice = max(0, A[Z-2] + L_slice)
+        until_now = max(L_slice, A[Z-1] + until_now)
+        once_total = max(until_now, once_total)
 
     return once_total
 
