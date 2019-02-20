@@ -63,49 +63,49 @@ N is an integer within the range [1..400,000];
 each element of array A is an integer within the range [0..1,000,000,000].
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at https://app.codility.com/demo/results/trainingKZZ92Z-HUN/ .
+You can check it out the result at https://app.codility.com/demo/results/trainingKCJKWJ-HZT/ .
 
 # you can write to stdout for debugging purposes, e.g.
 # print("this is a debug message")
 
 """
 
+from math import sqrt
+
 def solution(A):
     # write your code in Python 3.6
-    # 先找出peak的數目，再依序(1~len(A))計算兩兩之間的距離存入distances
-    # 依序在distances中由大至小遍歷peak，當flag_count等於flag後回傳
+    # 先找出peak的數目，再計算第一座peak與最後一座peak的平方根，此即為理論上的最大旗子數量
+    # 依照求出的最大旗子數量理論值反向依序，遍歷peaks[0]-[-1]，當flag_count大於等於flag後回傳
+    # Codility 官方解答 https://codility.com/media/train/solution-flags.pdf
+    # more detail please check it out at https://codesays.com/2014/solution-to-boron2013-flags-by-codility/#comment-949 .
 
     if len(A) < 3: return 0
-    
     peaks = []
-    distances = []
 
     for idx in range(1, len(A)-1):
         if A[idx-1] < A[idx] > A[idx+1]:
             peaks.append(idx)
 
-    peak_num = len(peaks)
-    if peak_num < 2: return peak_num
+    if len(peaks) == 0: return 0
     
-    for idx in range(1, peak_num):
-        distances.append(peaks[idx] - peaks[idx-1])
+    max_possibile_flag_count = int(sqrt(peaks[-1]-peaks[0])) + 1
 
-    for flag in range(peak_num, 0, -1):
-        tmp = 0
-        check = distances.copy()
+    for flag in range(max_possibile_flag_count, 0, -1):
         flag_count = 1
-
-        while check:
-            tmp += check[0]
-            check = check[1:]
+        tmp = 0
+        for idx in range(1, len(peaks)):
+            tmp += peaks[idx] - peaks[idx-1]
             if tmp >= flag:
-                tmp = 0
                 flag_count += 1
-
-        if flag_count == flag:
-            return flag_count
-
+                tmp = 0
+        
+        if flag_count >= flag:
+            return flag
+    
     return 0
+                 
+
+    
 
 #testcase 1
 A = [1, 5, 3, 4, 3, 4, 1, 2, 3, 4, 6, 2]
