@@ -71,61 +71,42 @@ N is an integer within the range [1..100,000];
 each element of array A is an integer within the range [0..1,000,000,000].
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at https://app.codility.com/demo/results/trainingT5DHQX-QG9/ .
+You can check it out the result at https://app.codility.com/demo/results/trainingFT9KYT-V5Q/ .
 
 # you can write to stdout for debugging purposes, e.g.
 # print("this is a debug message")
 
 """
 
-from math import sqrt
-
 def solution(A):
     # write your code in Python 3.6
-    # 準備一個長度為len(A)的[0]陣列Ｘ，依序判斷peak後，在peak位置填入1
-    # 計算len(A)的因數，並將Ｘ拆分成blocks，依序判斷blocks中是否有1，紀錄最大數目的blocks數後回傳
-    # 複雜度為O(N*log(log(N)))
+    # 假設前提是每一個peak都有一個block，此時的blocks數為最多。
+    # 故先找出peak的數目與index，接著依序計算len(A)/peak數字序列，找出可整除的分組長度
+    # 依序計算peak是否落在block內，並檢測是否每個block都有peak，若有就回傳block數目
+    # more detail please check it out at https://www.martinkysel.com/codility-peaks-solution/ .
 
     N = len(A)
-    X = [0]*N
-    F = []
-    count = 0
+    if N < 3: return 0
+    peaks = []
 
-    if N < 3:
-        return 0
-
-    for idx in range(1, N - 1):
+    for idx in range(1, N-1):
         if A[idx-1] < A[idx] > A[idx+1]:
-            X[idx] = 1
+            peaks.append(idx)
 
-    if not 1 in X:
-        return 0
+    for size in range(len(peaks), 0, -1):
+         if N % size == 0:
 
-    for i in range(1, int(sqrt(N))+1):
-        if N % i == 0:
-            F.append(i)
-            j = int(N / i)
-            if N % j == 0:
-                F.append(j)
+            block_len = N // size
+            check = [0]*size
+            for elem in peaks:
+                ptr = elem // block_len
+                if check[ptr] == 0:
+                    check[ptr] = 1
 
-    if len(F) == 2:
-        return 1
+            if check.count(1) == size:
+                return size
 
-    F.sort()
-
-    for i in range(1, len(F)):
-        ptr = 0
-        blocks = int(N/F[i])
-
-        for j in range(blocks):
-            if 1 in X[F[i]*j:F[i]*j+F[i]]:
-                ptr += 1
-        
-        if ptr == blocks:
-            if count < blocks:
-                return blocks
-
-    return count
+    return 0
 
 # testcase 1
 A = [1, 2, 3, 4, 3, 4, 1, 2, 3, 4, 6, 2]
