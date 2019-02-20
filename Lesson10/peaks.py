@@ -71,7 +71,7 @@ N is an integer within the range [1..100,000];
 each element of array A is an integer within the range [0..1,000,000,000].
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at https://app.codility.com/demo/results/training7TJNGF-U5B/ .
+You can check it out the result at https://app.codility.com/demo/results/trainingT5DHQX-QG9/ .
 
 # you can write to stdout for debugging purposes, e.g.
 # print("this is a debug message")
@@ -83,7 +83,8 @@ from math import sqrt
 def solution(A):
     # write your code in Python 3.6
     # 準備一個長度為len(A)的[0]陣列Ｘ，依序判斷peak後，在peak位置填入1
-    # 計算len(A)的因數，並將Ｘ拆分成blocks，依序判斷blocks中是否有1，計算次數後回傳
+    # 計算len(A)的因數，並將Ｘ拆分成blocks，依序判斷blocks中是否有1，紀錄最大數目的blocks數後回傳
+    # 複雜度為O(N*log(log(N)))
 
     N = len(A)
     X = [0]*N
@@ -94,7 +95,7 @@ def solution(A):
         return 0
 
     for idx in range(1, N - 1):
-        if A[idx-1] < A[idx] and A[idx] > A[idx+1]:
+        if A[idx-1] < A[idx] > A[idx+1]:
             X[idx] = 1
 
     if not 1 in X:
@@ -110,9 +111,9 @@ def solution(A):
     if len(F) == 2:
         return 1
 
-    F.sort(reverse = True)
+    F.sort()
 
-    for i in range(len(F) - 1):
+    for i in range(1, len(F)):
         ptr = 0
         blocks = int(N/F[i])
 
@@ -121,8 +122,9 @@ def solution(A):
                 ptr += 1
         
         if ptr == blocks:
-            count += 1
-                
+            if count < blocks:
+                return blocks
+
     return count
 
 # testcase 1
@@ -143,4 +145,8 @@ print(solution(A))
 
 # testcase 5
 A = [0, 0, 0, 0, 1]
+print(solution(A))
+
+# testcase 6
+A = [1, 3, 2, 1]
 print(solution(A))
