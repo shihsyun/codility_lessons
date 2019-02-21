@@ -43,7 +43,7 @@ N is an integer within the range [1..50,000];
 each element of array A is an integer within the range [1..2 * N].
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at https://app.codility.com/demo/results/trainingVZNH3U-9ZQ/ .
+You can check it out the result at https://app.codility.com/demo/results/training9SHP9B-D7J/ .
 
 # you can write to stdout for debugging purposes, e.g.
 # print("this is a debug message")
@@ -52,19 +52,46 @@ You can check it out the result at https://app.codility.com/demo/results/trainin
 
 def solution(A):
     # write your code in Python 3.6
-    # 依照題目定義，使用迴圈計算。
-    # 複雜度為O(N ** 2)，拿到55%。
+    # 任何數除了自己外，1是所有的除數，所以準備一個陣列div，先把每一個元素的1和自己用集合的方式存進去
+    # 找出A的最大值，使用質數篩選法，把各元素的除數放進集合陣列div中，若idx是除數則N // idx也是除數，故一次可以找到兩個。
+    # 再來A陣列裡的元素有可能會重複出現，所以需要先計算出現的次數存在count集合裡
+    # 此時我們已經可以知道A陣列的每個元素的除數集合與各元素重複出現的次數，此時只要遍歷A陣列，
+    # 加總計算各元素存在div的所有除數與count中紀錄的出現次數，再用A陣列長度減去上述總和，即可存進result回傳。
+    # 複雜度降為O(N * log(N))
+    # more detail please check it out at https://www.martinkysel.com/codility-countnondivisible-solution/ .
 
-    N = len(A)
-    result = [0]*N
+    div = {}
+    for elem in A:
+        div[elem] = set([1, elem])
 
-    for idx, value in enumerate(A):
-        for i in range(N):
-            if value % A[i] != 0:
-                result[idx] += 1
+    A_max = max(A)
+    idx = 2
+    while idx * idx <= A_max:
+        elem = idx
+        while elem <= A_max:
+            if elem in div and not idx in div[elem]:
+                div[elem].add(idx)
+                div[elem].add(elem // idx)
+            elem += idx
+        idx += 1
 
-    return result
-    
+    count = {}
+    for elem in A:
+        if elem not in count:
+            count[elem] = 1
+        else:
+            count[elem] += 1
+
+    result = [0]*len(A)
+    for idx, elem in enumerate(A):
+        tmp = 0
+        for value in div[elem]:
+            tmp += count.get(value, 0)
+        
+        result[idx] = len(A) - tmp
+
+    return result     
+
 
 # testcase 1
 A = [3, 1, 2, 3, 6]
