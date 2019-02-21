@@ -41,56 +41,49 @@ each element of arrays P, Q is an integer within the range [1..N];
 P[i] ≤ Q[i].
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at https://app.codility.com/demo/results/trainingZCFDHY-K9V/ .
+You can check it out the result at https://app.codility.com/demo/results/training7DCTKV-ME4/ .
 
 # you can write to stdout for debugging purposes, e.g.
 # print("this is a debug message")
 
 """
 
-from math import sqrt
-
 def solution(N, P, Q):
     # write your code in Python 3.6
-    # 先計算N的平方根內所有質數，再依序計算出所有半質數陣列
-    # 再利用陣列填值法求出P&Q的差距後回傳
-    # 可參考官方教材 https://codility.com/media/train/9-Sieve.pdf
-    # 複雜度為O(N * log(log(N)) + M * N) or O(M * N**3) or O(M * N ** (3/2))，拿到55%。
+    # 先計算N的所有質數，接著依序使用雙迴圈計算出所有半質數陣列，內迴圈需從外迴圈的idx起始做計算，大於N時需Break
+    # 最後再利用prefix sum法求出Q-P-1的差距後回傳，複雜度降為O(N*log(log(N))+M)。
+    # more detail please check it out at https://codesays.com/2014/solution-to-count-semiprimes-by-codility/.
     
-    max_num = int(sqrt(N)) + 1
-    prime = list((range(2, N)))
-    semi_prime = []
+    prime_table = [False]*2+[True]*(N-1)
+    prime = []
+    semi_prime = [0]*(N+1)
     result = []
-    
-    for idx in range(2, max_num):
+
+    idx = 2
+    while idx**2 <= N:
         i = 2
-        while (idx * i) < N:
-            try:
-                total  = idx * i
-                i += 1
-                prime.remove(total)
-            except:
-                continue
-
-    for num in prime:
-        for elem in prime:
-            tmp = num * elem
-            if tmp <= N:
-                if tmp not in semi_prime: 
-                    semi_prime.append(tmp)
-            else:
-                continue
-        
-    semi_prime.sort()
+        while idx * i < N:
+            prime_table[idx*i] = False
+            i += 1
+        idx += 1
     
+    for idx in range(len(prime_table)):
+        if prime_table[idx]:
+            prime.append(idx)
+
+    for idx in range(len(prime)):
+        for i in range(idx, len(prime)):
+            tmp = prime[idx] * prime[i]
+            if tmp <= N:
+                semi_prime[tmp] = 1
+            else:
+                break
+
+    for idx in range(1, N+1):
+        semi_prime[idx] += semi_prime[idx-1]
+
     for idx in range(len(P)):
-        distances = [0]*len(semi_prime)
-        for i in range(len(semi_prime)):
-            if P[idx] <= semi_prime[i] <= Q[idx]:
-                distances[i] = 1
-
-        result.append(distances.count(1))
-
+        result.append(semi_prime[Q[idx]] - semi_prime[P[idx] - 1])
 
     return result
 
