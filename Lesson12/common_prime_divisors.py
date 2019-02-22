@@ -32,78 +32,47 @@ Z is an integer within the range [1..6,000];
 each element of arrays A, B is an integer within the range [1..2,147,483,647].
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at https://app.codility.com/demo/results/trainingEV3KA3-J6T/ .
+You can check it out the result at https://app.codility.com/demo/results/training3DPZED-C6W/ .
 
 # you can write to stdout for debugging purposes, e.g.
 # print("this is a debug message")
 
 """
 
-def check(N, prime_table):
-    
-    factor = set()
+def gcd(x, y):
+    if x % y == 0:
+        return y
+    else:
+        return gcd(y, x % y)
 
-    if N == 1:
-        return factor
-
-    if N == 2:
-        factor.add(N)
-
-    for idx in range(N+1):
-        if prime_table[idx]:
-            if N % idx == 0:
-                factor.add(idx)
-
-    return factor
 
 
 def solution(A, B):
     # write your code in Python 3.6
-    # 先取A,B兩陣列的最大值做出質數表與產生檢查結果陣列result
-    # 依序判斷A,B各元素是不是質數，若兩者相異又各是質數，則result紀錄為False
-    # 若A,B元素皆不是質數，則利用質數表分別對元素檢查質數因數並紀錄成集合，對集合做差集，
-    # 若不為空集合則result紀錄為False，count result後回傳。
-    # codility回報記憶體錯誤如下，拿到38%。
-    # stderr:
-    #   Traceback (most recent call last):
-    #       File "exec.py", line 139, in <module>
-    #       main()
-    #       File "exec.py", line 101, in main
-    #       result = solution( A, B )
-    #       File "/tmp/solution.py", line 28, in solution
-    #       prime_table = [False]*2+[True]*(num_max-1)
-    #       MemoryError
+    # 先對A[idx]與B[idx]取最大公因數為X，接著再取X與A[idx]的最大公因數d，如果d不是1，則a=a/d後再求最大公因數以
+    # 去除非質數因數；接著取X與B[idx]的最大公因數d，如果d不是1則b=b/d去除非質數因數。
+    # 以上兩個若皆為1則A[idx]與B[idx]有相同的質數因數。
+    # more detail please check it out at https://codesays.com/2014/solution-to-common-prime-divisors-by-codility/#comment-1258 .
 
-    N = len(A)
-    num_max = max(max(A), max(B))
-    prime_table = [False]*2+[True]*(num_max-1)
-    result = [False]*N
+    count = 0
+    for a,b in zip(A, B):
+        x = gcd(a,b)
+        
+        while True:
+            d = gcd(x, a)
+            if d == 1:
+                break
+            a /= d
 
-    idx = 2
-    while idx**2 <= num_max:
-        i = 2
-        while idx * i <= num_max:
-            prime_table[idx*i] = False
-            i += 1
-        idx += 1
+        while True:
+            d = gcd(x, b)
+            if d == 1:
+                break
+            b /= d
+            
+        count  += 1 if a == 1 and b == 1 else 0
 
-    for idx in range(N):
-        if A[idx] == B[idx]:
-            result[idx] = True
-            continue
-
-        if prime_table[A[idx]] and prime_table[B[idx]]:
-            result[idx] = False
-            continue
-
-        if A[idx] > B[idx]:
-            if len(check(A[idx], prime_table) - check(B[idx], prime_table)) == 0:
-                result[idx] = True
-        else:
-            if len(check(B[idx], prime_table) - check(A[idx], prime_table)) == 0:
-                result[idx] = True
-
-    return result.count(True)
+    return count
 
 # testcase 1
 A = [15, 10, 3]
