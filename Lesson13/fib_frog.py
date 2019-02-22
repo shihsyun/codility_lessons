@@ -57,62 +57,53 @@ N is an integer within the range [0..100,000];
 each element of array A is an integer that can have one of the following values: 0, 1.
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at https://app.codility.com/demo/results/trainingDTGA4J-AU2/ .
+You can check it out the result at https://app.codility.com/demo/results/trainingKFWXX3-YVC/ .
 
 # you can write to stdout for debugging purposes, e.g.
 # print("this is a debug message")
 
 """
 
-def fibonacci(N):
-
-    fib = [0]* (N+1)
-    fib[1] = 1
-
-    for idx in range(2, N+1):
-        fib[idx] = fib[idx-2] + fib[idx-1]
-
-    fib = fib[3:]
-    fib.sort(reverse = True)
-    
-    if len(fib) > 10:
-        fib = fib[:10]
-
-    return fib
-
-
 def solution(A):
     # write your code in Python 3.6
-    # 先準備好Fib表，接著計算河中有葉子的距離存成river
-    # 查表後count步數回傳
+    # 這題需要使用Dynamic programming演算法解決，DP的說明可以參考這個
+    # http://www.csie.ntnu.edu.tw/~u91029/DynamicProgramming.html
+    # 先將A append 1代表另一岸並預先準備小於N的fib表，先設長度為27，再去除[0, 1]與大於Ｎ之後的部份
+    # 準備好next_try陣列，並將fib表中的位址-1處都先標記為1，代表青蛙第一次就可以跳到這些地方(因為青蛙是從-1開始跳)
+    # 接著依序檢查next_try[idx] > 0(代表這個位址青蛙可以跳到)與A[idx]是否等於1(代表有葉子)
+    # 開始依序檢查idx+fib是否超過N　有則需要break 跳到下一個位置 如果沒有再接著判斷
+    # next_try的[idx+fib]是否<0  這代表青蛙還沒來過
+    # 或next_try[idx+fib] > next[idx]+1 這代表idx+fib是比idx+1更好的選擇
+    # 如果以上兩者其一成立，將next[idx]+1放入next_try[idx+fib]中，跑完迴圈後回傳next_try[-1]就是最少步數
+    # 複雜度降為O(N*log(N))
+    # more detail please check it out at https://www.martinkysel.com/codility-fibfrog-solution/#comment-4291808529 .
 
+    A.append(1)
     N = len(A)
 
-    if N <= 2: return 1
+    fib_table = [0]*27
+    fib_table[1] = 1
 
-    fib_table = fibonacci(N)
-    count = 0
+    for idx in range(2, 27):
+        fib_table[idx] = fib_table[idx-1] + fib_table[idx-2]
+        if fib_table[idx] > N:
+            break
+    
+    fib_table = fib_table[2:idx]
 
-    A = [0]+A+[1]
-    ptr = 0
-    river = []
-    for idx in range(len(A)):
-        if A[idx] == 1:
-            river.append(idx - ptr)
-            ptr = idx
+    next_try = [-1]*N
+    for idx in range(len(fib_table)):
+        next_try[fib_table[idx] - 1] = 1
 
-    tmp = 0
-    while river:
-        tmp += river[0]
-        if tmp in fib_table:
-            count += 1
-            tmp = 0
-        river = river[1:]
+    for idx, leaf in enumerate(A):
+        if next_try[idx] > 0 and leaf == 1:
+            for fib in fib_table:
+                if idx + fib >= N:
+                    break
+                if next_try[idx+fib] < 0 or next_try[idx+fib] > next_try[idx]+1:
+                    next_try[idx+fib] = next_try[idx]+1
 
-    if tmp > 1:
-        return -1
-
-    return count
+    return next_try[-1]
 
 # testcase 1
 A = [0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0]
