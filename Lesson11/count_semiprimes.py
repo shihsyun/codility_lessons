@@ -41,7 +41,7 @@ each element of arrays P, Q is an integer within the range [1..N];
 P[i] ≤ Q[i].
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at https://app.codility.com/demo/results/training7DCTKV-ME4/ .
+You can check it out the result at https://app.codility.com/demo/results/training65KSQW-V2S/ .
 
 # you can write to stdout for debugging purposes, e.g.
 # print("this is a debug message")
@@ -62,7 +62,7 @@ def solution(N, P, Q):
     idx = 2
     while idx**2 <= N:
         i = 2
-        while idx * i < N:
+        while idx * i <= N:
             prime_table[idx*i] = False
             i += 1
         idx += 1
