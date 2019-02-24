@@ -50,7 +50,7 @@ each element of array A is an integer within the range [1..L];
 each element of array B is an integer within the range [1..30].
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at https://app.codility.com/demo/results/trainingEDHH9G-KS2/ .
+You can check it out the result at https://app.codility.com/demo/results/trainingXRFE8A-BPJ/ .
 
 # you can write to stdout for debugging purposes, e.g.
 # print("this is a debug message")
@@ -60,13 +60,14 @@ You can check it out the result at https://app.codility.com/demo/results/trainin
 def solution(A, B):
     # write your code in Python 3.6
     # 這題是計算A[i]與2**B[i]的同餘 https://zh.wikipedia.org/wiki/%E5%90%8C%E9%A4%98
-    # A[i]階的可能路徑恰好是Fib[i+1] ex: 3階3種 4階5種 5階8種，故先計算出1~5000的Fib與2**30表備用
-    # 接著再依序求出與B[i]的同餘後回傳即可，拿到87%，複雜度為O(L**2)
-  
+    # A[i]階的可能路徑恰好是Fib[i+1] ex: 3階3種 4階5種 5階8種，故先計算出1~5000的Fib
+    # 查詢網路作法後，發現可以用 & + shift 作法取代 modulo ex: x modulo y = (x & (y − 1)) when y is a pow of 2
+    # 複雜度降為O(L)，拿到100%。
+    # more detail please check it out at https://stackoverflow.com/questions/6670715/mod-of-power-2-on-bitwise-operators/6670766#6670766 .
+   
     max_num  = max(A)
     N = len(A)
     fib_table = [0, 1] + [-1]*max_num
-    pow_table = [0]*31
     result = [0]*N
 
     for idx in range(2, max_num + 2):
@@ -74,12 +75,9 @@ def solution(A, B):
 
     fib_table = fib_table[2:]
 
-    for idx in range(1, 31):
-        pow_table[idx] = 2**idx
-
     for idx in range(N):
         value = fib_table[A[idx] - 1]
-        result[idx] = value % pow_table[B[idx]]
+        result[idx] = value & ((1 << B[idx]) - 1)
 
     return result
 
