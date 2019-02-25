@@ -62,7 +62,7 @@ each element of arrays A, B, C is an integer within the range [1..2*M];
 A[K] ≤ B[K].
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at https://app.codility.com/demo/results/trainingRD3JMT-WS4/ .
+You can check it out the result at https://app.codility.com/demo/results/training8FFB82-GYV/ .
 
 # you can write to stdout for debugging purposes, e.g.
 # print("this is a debug message")
@@ -71,22 +71,23 @@ You can check it out the result at https://app.codility.com/demo/results/trainin
 
 def solution(A, B, C):
     # write your code in Python 3.6
-    # 依序使用迴圈計算A[K] ≤ C[I] ≤ B[K]，count次數後回傳。
+    # A與B的關係可用如下圖來表示
+    # http://3.bp.blogspot.com/-Az6YwCDrGzo/VRCTc5URJjI/AAAAAAAAAtQ/ZZ43tVqr054/s1600/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%2B2015-03-24%2B6.27.05.png
+    # 多開一個result陣列，長度為len(A)，由第一根釘子開始，對每一層木板都重頭依序判斷並紀錄是否有滿足A[K] ≤ C[I] ≤ B[K]
+    # 若通通滿足(not 0 in result)則回傳當前的idx+1(也就是C的I)，若無法找到釘子可將木板全部釘住(也就是result還有0)，就回傳-1
+    # 複雜度為O((N+M)*N)，拿到50%。
 
-    count = 0
+    result = [0]*len(A)
 
-    i = 0
     for idx in range(len(C)):
-        while i < len(A):
+        for i in range(len(A)):
             if A[i] <= C[idx] <= B[i]:
-                count += 1
-                break
-            i += 1
+                result[i] = 1
 
-    if count == 0:
-        return -1
-    else:
-        return count
+        if not 0 in result:
+                return idx + 1
+
+    return -1
 
 # testcase 1
 A = [1, 4, 5, 8]
