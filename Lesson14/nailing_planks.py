@@ -83,6 +83,7 @@ You can check it out the result at https://app.codility.com/demo/results/trainin
     # https://app.codility.com/demo/results/trainingN7347P-KCK/
     # 最後取nail_count的歷次計算最大值+1(因陣列是由0開始計算)回傳即可，這樣可以拿到100%。
     # more detail please check it out at https://codesays.com/2014/solution-to-nailing-planks-by-codility/ .
+    # and https://www.martinkysel.com/codility-nailingplanks-solution/
 
 BEGIN_POS = 0
 END_POS = 1
@@ -163,31 +164,3 @@ A = [1, 1, 1]
 B = [2, 2, 2]
 C = [3, 2, 1]
 print(solution(A, B, C))
-
-
-"""
-def check_nail_count(nails, plank, pre_count):
- 
-    nail_count = -1
-    nail_pos = find_nail_pos(nails, plank)
-
-    if nail_pos == -1:
-        return nail_count
-    else:
-        nail_count = nails[nail_pos][0]
-    
-    while nail_pos < len(nails):
-        
-        if nails[nail_pos][1] > plank[1]:
-            break
-        
-        nail_count = min(nail_count, nails[nail_pos][0])
-        
-        if nail_count <= pre_count:
-            #return nail_count
-            break
-        
-        nail_pos += 1
-
-    return nail_count
-    """
