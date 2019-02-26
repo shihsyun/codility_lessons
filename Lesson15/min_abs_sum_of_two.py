@@ -46,7 +46,7 @@ N is an integer within the range [1..100,000];
 each element of array A is an integer within the range [−1,000,000,000..1,000,000,000].
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at https://app.codility.com/demo/results/trainingAGNR8R-XKD/ .
+You can check it out the result at https://app.codility.com/demo/results/trainingMRQ2GU-2AF/ .
 
 # you can write to stdout for debugging purposes, e.g.
 # print("this is a debug message")
@@ -55,18 +55,22 @@ You can check it out the result at https://app.codility.com/demo/results/trainin
 def solution(A):
     # write your code in Python 3.6
     # 依照題目使用雙迴圈，拿到36%。
-
-    N = len(A)
-    beg, end = 0, 0
+    # 先將A排序，則min abs sum必定在差距最小的連續兩個數列上
+    # more detail please check it out at https://www.martinkysel.com/codility-minabssumoftwo-solution/ .
+    
     diff = int(20E8)
+    beg = 0
+    end = len(A) - 1
+    A.sort()
 
-    while beg < N:
-        end = beg
-        while end < N:
-            diff = min(diff, abs(A[beg]+A[end]))
-            end += 1
-        beg += 1
+    while beg <= end:
+        diff = min(diff, abs(A[beg]+A[end]))
 
+        if abs(A[beg]) > abs(A[end]):
+          beg += 1
+        else:
+          end -= 1
+      
     return diff
 
 # testcase 1
@@ -75,4 +79,8 @@ print(solution(A))
 
 # testcase 2
 A = [-8, 4, 5, -10, 3]
+print(solution(A))
+
+# testcase ３
+A = [0]
 print(solution(A))
