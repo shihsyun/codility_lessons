@@ -31,7 +31,7 @@ N is an integer within the range [0..1,000];
 each element of array A is an integer within the range [1..1,000,000,000].
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at https://app.codility.com/demo/results/trainingY365HH-24K/ .
+You can check it out the result at https://app.codility.com/demo/results/trainingTP63YD-484/ .
 
 # you can write to stdout for debugging purposes, e.g.
 # print("this is a debug message")
@@ -40,17 +40,19 @@ You can check it out the result at https://app.codility.com/demo/results/trainin
 def solution(A):
     # write your code in Python 3.6
     # 依照題目，使用迴圈count，複雜度為O(N**3)
+    # 依照官方教材，複雜度降為O(N**2)
+    # more detail please check it out at https://codility.com/media/train/13-CaterpillarMethod.pdf .
 
     N = len(A)
     count = 0
     
-    for x in range(N):        
+    A.sort()
+    for x in range(N):
+        z = x + 2
         for y in range(x + 1, N):
-            z = y + 1
-            while z < N:
-                if A[x] + A[y] > A[z] and A[x] + A[z] > A[y] and A[z] + A[y] > A[x]:
-                    count += 1
-                z += 1
+            while z < N  and A[x] + A[y] > A[z]:
+                z += 1    
+            count += z - y - 1
 
     return count
 
