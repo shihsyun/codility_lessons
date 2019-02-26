@@ -41,7 +41,7 @@ M is an integer within the range [0..100,000];
 each element of array A is an integer within the range [0..M].
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at https://app.codility.com/demo/results/training2RWXAR-P7N/ .
+You can check it out the result at https://app.codility.com/demo/results/trainingCMXFSA-XZ5/ .
 
 # you can write to stdout for debugging purposes, e.g.
 # print("this is a debug message")
@@ -50,31 +50,26 @@ You can check it out the result at https://app.codility.com/demo/results/trainin
 def solution(M, A):
     # write your code in Python 3.6
     # 使用雙迴圈count，拿到70%。
+    # 查詢網路作法後，使用Caterpillar method，先準備一個seen的boolean陣列，長度為Ｍ+1
+    # 接著依序檢查A[back]是否已有出現，若有則移動back(back+=1)並把seen[A[back]]設為False
+    # 反之則count+=(back-front)，並移動front與將seen[A[front]]設為True，複雜度降為O(N)
+    # more detail please check it out at https://codesays.com/2014/solution-to-count-distinct-slices-by-codility/#comment-1794 .
 
+    seen = [False]*(M+1)
     N = len(A)
-    count = 0
-    beg = 0
-    end = 0
+    front, back, count = 0, 0, 0
+
+    while front < N:
+        if back < N and seen[A[back]] == False:
+            seen[A[back]] = True
+            back += 1
+        else:
+            count += back - front
+            seen[A[front]] = False
+            front += 1
+
+    return min(count , int(10E8))
     
-    while beg < N:
-        end = beg
-        while end < N:
-
-            if len(set(A[beg:end+1])) == len(A[beg:end+1]):
-                count += 1
-            else:
-                break
-
-            end += 1
-
-        beg += 1
-        
-
-    if count >= 10E8:
-        return int(10E8)
-
-    return count
-
 # testcase 1
 M = 6
 A = [3, 4, 5, 5, 2]
