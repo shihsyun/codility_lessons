@@ -37,7 +37,7 @@ A[I] ≤ B[I], for each I (0 ≤ I < N);
 B[K] ≤ B[K + 1], for each K (0 ≤ K < N − 1).
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at https://app.codility.com/demo/results/trainingHJ63GS-4VN/ .
+You can check it out the result at https://app.codility.com/demo/results/trainingR2WCJN-EM7/ .
 
 # you can write to stdout for debugging purposes, e.g.
 # print("this is a debug message")
@@ -46,29 +46,22 @@ You can check it out the result at https://app.codility.com/demo/results/trainin
 def solution(A, B):
     # write your code in Python 3.6
     # 只能判斷特殊狀況，拿到10%
+    # 其實只要計算完全沒跟其它區段相交的區段數量就是答案了
+    # more detail please check it out at http://codility-lessons.blogspot.com/2015/03/lesson-14-maxnonoverlappingsegments-max.html .
+    # https://stackoverflow.com/questions/20929697/how-to-find-maximum-number-of-segments-of-a-infinite-rod-with-given-n-cuts
     
-
-    N = len(A)
-    
-    if N == 0:
+    if len(A) < 1:
         return 0
 
-    if N == 1:
-        return 1
+    count = 1
+    prev_end = B[0]
 
-    count = 0
-    tmp = set()
-    for idx in range(N):        
-        for i in range(idx, N):
-            if not A[idx] <= A[i] <= B[idx] or A[i] <= A[idx] <= B[i]:
-                tmp.add(i)
-                
-            else:
-                continue
-        count += (len(tmp) - 2)
-        tmp =  set()
-        
-    return max(0, count-1)
+    for idx in range(1, len(A)):
+        if A[idx] > prev_end:
+            count += 1
+            prev_end = B[idx]
+
+    return count
 
 # testcase 1
 A = [1, 3, 7, 9, 9]
