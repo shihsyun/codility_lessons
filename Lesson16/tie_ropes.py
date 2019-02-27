@@ -51,38 +51,27 @@ K is an integer within the range [1..1,000,000,000];
 each element of array A is an integer within the range [1..1,000,000,000].
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at https://app.codility.com/demo/results/trainingE7PPHR-53K/ .
+You can check it out the result at https://app.codility.com/demo/results/training27VWDA-WPC/ .
 
 # you can write to stdout for debugging purposes, e.g.
 # print("this is a debug message")
 
 """
 
-from collections import deque
-
 def solution(K, A):
     # write your code in Python 3.6
     # 使用deque與反向排序，拿到25%
+    # 查詢網路作法後，得知原來按照順序迴圈計算即可
+    # more detail you can check it out at https://codesays.com/2014/solution-to-tie-ropes-by-codility/ .
 
-    A = deque(sorted(A, reverse = True))
     count = 0
-    
-    while A:
-        elem = A.popleft()
-        if elem >= K:
-            count += 1            
-        else:
-            if len(A) > 1:
-                tmp = A.pop()
-                while (elem+tmp) <= K:
-                    if len(A) > 1:
-                        tmp += A.pop()
-                    else:
-                        break
-                count += 1
+    tmp = 0
 
-            else:
-                break
+    for elem in A:
+        tmp += elem
+        if tmp >= K:
+            count += 1
+            tmp = 0
 
     return count
 
