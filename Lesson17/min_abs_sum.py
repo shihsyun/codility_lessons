@@ -30,7 +30,7 @@ N is an integer within the range [0..20,000];
 each element of array A is an integer within the range [−100..100].
 Copyright 2009–2019 by Codility Limited. All Rights Reserved. Unauthorized copying, publication or disclosure prohibited.
 
-You can check it out the result at https://app.codility.com/demo/results/trainingHUF9CP-XQS/ .
+You can check it out the result at https://app.codility.com/demo/results/trainingA6XJCP-6RX/ .
 
 # you can write to stdout for debugging purposes, e.g.
 # print("this is a debug message")
@@ -39,30 +39,39 @@ You can check it out the result at https://app.codility.com/demo/results/trainin
 
 def solution(A):
     # write your code in Python 3.6
-    # 複雜度為O(N**2*max(abs(A)))，可以拿到63%
+    # 複雜度為O(N * max(abs(A))**2)，可以拿到100%
     # 官方解答 https://codility.com/media/train/solution-min-abs-sum.pdf
     # more detail please check it out at https://stackoverflow.com/questions/44897316/codility-minabssum .
 
     N = len(A)
-
+    M = 0
+    
     for i in range(N):
         A[i] = abs(A[i])
+        M = max(A[i], M)
     
     S = sum(A)
-    dp = [0] * (S + 1)
-    dp[0] = 1
-        
-    for j in range(N):
-        for i in range(S, -1, -1):
-            if (dp[i] == 1) and (i + A[j] <= S):
-                dp[i + A[j]] = 1
+    count = [0] * (M + 1)
+    
+    for i in range(N):
+        count[A[i]] += 1
+    
+    dp = [-1] * (S + 1)
+    dp[0] = 0
+    
+    for a in range(1, M + 1):
+        if count[a] > 0:
+            for j in range(S):
+                if dp[j] >= 0:
+                    dp[j] = count[a]
+                elif (j >= a and dp[j - a] > 0):
+                    dp[j] = dp[j - a] - 1
     
     result = S
-
-    for i in range(S // 2 + 1):
-        if dp[i] == 1:
-            result = min(result, S - 2 * i)
     
+    for i in range(S // 2 + 1):
+        if dp[i] >= 0:
+            result = min(result, S - 2 * i)
     return result
 
 # testcase 1
