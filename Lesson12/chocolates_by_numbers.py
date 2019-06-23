@@ -36,20 +36,23 @@ You can check it out the result at https://app.codility.com/demo/results/trainin
 
 """
 
+
 def gcd(a, b):
     if a % b == 0:
         return b
     else:
         return gcd(b, a % b)
 
+
 def solution(N, M):
     # write your code in Python 3.6
-    # 求N與M的最大公因數X後，回傳N/M
+    # 求N與M的最大公因數X後，回傳N/X
     # 參考官方教材 https://codility.com/media/train/10-Gcd.pdf
 
     X = gcd(N, M)
 
     return int(N / X)
+
 
 # testcase 1
 N = 10
