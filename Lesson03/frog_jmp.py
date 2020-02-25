@@ -33,16 +33,13 @@ You can check it out the result at https://app.codility.com/demo/results/trainin
 
 # you can write to stdout for debugging purposes, e.g.
 # print("this is a debug message")
+import math
 
 def solution(X, Y, D):
     # write your code in Python 3.6
     # 須注意非整除時，須再增加一步
-
-    tail = 0
-    if (Y - X) % D != 0:
-        tail = 1
     
-    return (Y - X) // D + tail
+    return math.ceil((Y-X)/D)
 
 X = 10
 Y = 85
